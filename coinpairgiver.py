@@ -7,7 +7,8 @@ response = requests.get("https://api.wazirx.com/api/v2/market-status") # gets da
 data = json.loads(response.text) #converts 'response' type data to python 'dict'
 #print(type(data))
 #print(data['assets']) # part which is under use
-
+depositdict = {}
+withdrawaldict = {}
 for asset in data['assets']:
     if asset['deposit'] == 'enabled':
         deposit = asset['type'] #prints codename of the coin ada,btc etc
@@ -19,8 +20,10 @@ for asset in data['assets']:
         #print(type(depositsymbolprice))
         #print(depositsymbolprice)
         if responsedepositsymbolprice.status_code == 200 : #if symbolpair is correct goes to next step
-            print(depositsymbolprice)
-print("yes")
+            #print("{'" + depositsymbolprice['symbol'].upper() + "': '" + depositsymbolprice['price'] + "'}")
+            depositdict.update({depositsymbolprice['symbol']: depositsymbolprice['price']})
+
+
 for asset in data['assets']:
     if asset['withdrawal'] == 'enabled':
         withdrawal = asset['type'] #prints codename of the coin ada,btc etc
@@ -32,6 +35,9 @@ for asset in data['assets']:
         #print(type(withdrawalsymbolprice))
         #print(withdrawalsymbolprice)
         if responsewithdrawalsymbolprice.status_code == 200 : #if symbolpair is correct goes to next step
-            print(withdrawalsymbolprice['lastPrice'])
+            #print("{'" + withdrawalsymbolprice['symbol'].upper() + "': '" + withdrawalsymbolprice['lastPrice'] + "'}")
+            withdrawaldict.update({withdrawalsymbolprice['symbol'].upper(): withdrawalsymbolprice['lastPrice']})
 
+print(depositdict)
+print(withdrawaldict)
 print(time.process_time()) # to see code performance time
